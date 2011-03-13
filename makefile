@@ -1,17 +1,18 @@
 CC = g++
 CFLAGS = -march=native -pipe #-O#n for nondebug
 CXXFLAGS = $(CFLAGS) -fPIC -Wall -g #-g << debugging
-BOOSTLIB = -lboost_thread #depends on arch	linux
-#BOOSTLIB = -lboost_thread-mt #depends on arch	wine
-LIBS = -ldl $(BOOSTLIB) -lsnmp
+LIBS = -lsnmp
 FLAGS = -I/usr/local/include
-MAKEFLAGS = -j5 #-j#n for threaded compiling
+MAKEFLAGS = -j5
+
+
+
+module_name=Snmp
 
 TOPDIR=../../../
 SRCDIR=src/
 LIBDIR=$(TOPDIR).libs/
-module_name=Snmp
-objects=$(module_name).o
+objects=$(SRCDIR)$(module_name).o
 output=$(module_name).so
 
 default: $(output)
@@ -26,7 +27,7 @@ $(output): $(objects)
 cleanDebug: clean
 cleanRelease: clean
 clean:
-	rm -f $(objects) $(LIBDIR)$(output)
+	rm -f $(SRCDIR)$(objects) $(LIBDIR)$(output)
 
 cleanall: clean
 
