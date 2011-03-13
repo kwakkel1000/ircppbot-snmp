@@ -1,11 +1,9 @@
 CC = g++
-CFLAGS = -march=native -pipe #-O#n for nondebug
-CXXFLAGS = $(CFLAGS) -fPIC -Wall -g #-g << debugging
+CFLAGS = -march=native -pipe -O3 #-O#n for nondebug
+CXXFLAGS = $(CFLAGS) -fPIC -Wall #-g << debugging
 LIBS = -lsnmp
 FLAGS = -I/usr/local/include
 MAKEFLAGS = -j5
-
-
 
 module_name=Snmp
 
