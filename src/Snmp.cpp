@@ -1,5 +1,5 @@
 #include "include/Snmp.h"
-#include "../../../include/core/Global.h"
+#include <core/Global.h>
 #include <iostream>
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
@@ -21,14 +21,15 @@ Snmp::Snmp()
 Snmp::~Snmp()
 {
     stop();
-	Global::Instance().get_IrcData().DelConsumer(D);
-    delete D;
+	Global::Instance().get_IrcData().DelConsumer(mpDataInterface);
+    delete mpDataInterface;
 }
-void Snmp::Init()
+
+void Snmp::Init(DataInterface* pData)
 {
-    D = new Data();
-    D->Init(true, false, false, true);
-    Global::Instance().get_IrcData().AddConsumer(D);
+	mpDataInterface = pData;
+	mpDataInterface->Init(true, false, false, true);
+    Global::Instance().get_IrcData().AddConsumer(mpDataInterface);
 
     timerlong();
 }
@@ -37,7 +38,7 @@ void Snmp::Init()
 void Snmp::stop()
 {
     run = false;
-    D->stop();
+    mpDataInterface->stop();
     std::cout << "Snmp::stop" << std::endl;
     raw_parse_thread->join();
     std::cout << "raw_parse_thread stopped" << std::endl;
@@ -59,7 +60,7 @@ void Snmp::parse_raw()
     std::vector< std::string > data;
     while(run)
     {
-        data = D->GetRawQueue();
+        data = mpDataInterface->GetRawQueue();
         ParseData(data);
     }
 }
@@ -69,7 +70,7 @@ void Snmp::parse_privmsg()
     std::vector< std::string > data;
     while(run)
     {
-        data = D->GetPrivmsgQueue();
+        data = mpDataInterface->GetPrivmsgQueue();
         PRIVMSG(data, "!");
     }
 }

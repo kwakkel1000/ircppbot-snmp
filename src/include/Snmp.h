@@ -1,14 +1,16 @@
 #ifndef Snmp_H
 #define Snmp_H
-#include "../../../../include/interfaces/ModuleInterface.h"
-#include "../../../../include/core/Data.h"
-#include "../../../../include/core/ModuleBase.h"
+#include <core/ModuleBase.h>
+#include <interfaces/DataInterface.h>
 #include <string>
 #include <vector>
+#include <map>
+#include <boost/shared_ptr.hpp>
+#include <boost/thread/thread.hpp>
 #include <net-snmp/net-snmp-config.h>
 #include <net-snmp/net-snmp-includes.h>
 
-class Data;
+class DataInterface;
 class Snmp : public ModuleBase
 {
 public:
@@ -16,11 +18,11 @@ public:
     ~Snmp();
     void read();
     void stop();
-    void Init();
+    void Init(DataInterface* pData);
     void timerrun();
 
 private:
-    Data * D;
+    DataInterface* mpDataInterface;
 
     void parse_raw();
     void parse_privmsg();

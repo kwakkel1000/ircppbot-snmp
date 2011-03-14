@@ -1,32 +1,25 @@
-CC = g++
-CFLAGS = -march=native -pipe -O3 #-O#n for nondebug
-CXXFLAGS = $(CFLAGS) -fPIC -Wall #-g << debugging
-LIBS = -lsnmp
-FLAGS = -I/usr/local/include
-MAKEFLAGS = -j5
+include ../MODULE_CONFIG
 
-module_name=Snmp
+CXX_CFLAGS 		= -I/usr/local/include
+CXX_LDFLAGS 	=
+LIBRARIES 		= $(CXX_SYSLIBS) -lsnmp
 
-TOPDIR=../../../
-SRCDIR=src/
-LIBDIR=$(TOPDIR).libs/
-objects=$(SRCDIR)$(module_name).o
-output=$(module_name).so
+MODULE_NAME		= Snmp
+OBJECTS			= $(MODULE_NAME).o
+OUTPUT			= $(MODULE_NAME).so
 
-default: $(output)
+default: $(OUTPUT)
 Debug: all
 Release: all
 all: default
 
 
-$(output): $(objects)
-	$(CC) -shared -o $(LIBDIR)$(@) $(objects) $(CXXFLAGS) $(FLAGS) $(LIBS)
+$(OUTPUT): $(SRC_DIR)$(OBJECTS)
+	$(CXX_LINK) -o $(LIB_DIR)$@ $(OBJECTS) $(LIBRARIES)
 
 cleanDebug: clean
 cleanRelease: clean
 clean:
-	rm -f $(SRCDIR)$(objects) $(LIBDIR)$(output)
+	rm -f $(OBJECTS) $(LIB_DIR)$(OUTPUT)
 
 cleanall: clean
-
-
