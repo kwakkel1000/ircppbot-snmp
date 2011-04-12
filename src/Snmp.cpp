@@ -230,7 +230,6 @@ void Snmp::timerrun()
     longtime++;
     if (longtime >= 30)
     {
-    	std::cout << "timed" << std::endl;
 		poller();
         timerlong();
         longtime = 0;
